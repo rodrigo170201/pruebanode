@@ -1,0 +1,79 @@
+<%- include('../../components/header.ejs') %>
+<div class="container">
+    <h3>Dejar una Reseña</h3>
+    <form action="/reviews/create" method="POST">
+        <div class="form-group">
+            <label for="restaurant">Seleccionar Restaurante</label>
+            <select id="restaurant" name="restaurantId" class="form-control">
+                <option value="">Seleccionar un restaurante</option>
+                <% restaurants.forEach(restaurant => { %>
+                    <option value="<%= restaurant.id %>"><%= restaurant.nombre %></option>
+                <% }); %>
+            </select>
+        </div>
+
+        <div class="form-group" id="burger-container">
+            <label for="burger">Seleccionar Hamburguesa</label>
+            <select id="burger" name="burgerId" class="form-control" disabled>
+                <option value="">Seleccionar una hamburguesa</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="puntuacion">Puntuación (1-5 estrellas)</label>
+            <select id="puntuacion" name="puntuacion" class="form-control">
+                <option value="">Seleccionar puntuación</option>
+                <% for (let i = 1; i <= 5; i++) { %>
+                    <option value="<%= i %>"><%= i %></option>
+                <% } %>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion">Comentarios</label>
+            <textarea id="descripcion" name="descripcion" class="form-control" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar Reseña</button>
+    </form>
+</div>
+<%- include('../../components/footer.ejs') %>
+
+<script>document.getElementById('restaurant').addEventListener('change', function() {
+    const restaurantId = this.value;
+    const burgerSelect = document.getElementById('burger');
+
+    if (restaurantId) {
+        fetch(`/reviews/api/burgers?restaurantId=${restaurantId}`)
+            .then(response => response.json())
+            .then(burgers => {
+                // Limpiar el select antes de agregar nuevas opciones
+                burgerSelect.innerHTML = '<option value="">Seleccionar una hamburguesa</option>';
+                
+                if (burgers.length > 0) {
+                    // Habilitar el select de hamburguesas porque hay opciones disponibles
+                    burgerSelect.disabled = false;
+
+                    // Agregar las hamburguesas obtenidas al select
+                    burgers.forEach(burger => {
+                        const option = document.createElement('option');
+                        option.value = burger.id;
+                        option.textContent = burger.nombre;
+                        burgerSelect.appendChild(option);
+                    });
+                } else {
+                    // Deshabilitar el select si no hay hamburguesas
+                    burgerSelect.disabled = true;
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener hamburguesas:', error);
+            });
+    } else {
+        // Limpiar y deshabilitar el select si no se ha seleccionado un restaurante
+        burgerSelect.innerHTML = '<option value="">Seleccionar una hamburguesa</option>';
+        burgerSelect.disabled = true;
+    }
+});
+
+</script>

@@ -1,0 +1,60 @@
+<%- include('../../components/header.ejs') %>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-10 col-xxl-4">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Crear una nueva hamburguesa</h5>
+                    <form method="post" action="/burgers/create">
+                        <% if (errors) { %>
+                            <div class="alert alert-warning">
+                                <%= errors.message %>
+                            </div>
+                        <% } %>
+                        <div class="mt-2">
+                            <label>Nombre</label>
+                            <input required class="form-control" type="text" name="nombre" placeholder="Nombre" value="<%= burger && burger.nombre %>">
+                            <% if (errors?.nombre) { %>
+                                <div class="error-label">
+                                    Por favor ingrese un nombre
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <div class="mt-2">
+                            <label>Descripción</label>
+                            <textarea required class="form-control" name="descripcion" placeholder="Descripción"><%= burger && burger.descripcion %></textarea>
+                            <% if (errors?.descripcion) { %>
+                                <div class="error-label">
+                                    Por favor ingrese una descripción
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <div class="mt-2">
+                            <label>Restaurant</label>
+                            <select required name="restaurantId" class="form-select">
+                                <option value="">Seleccione un restaurant</option>
+                                <% restaurants.forEach(restaurant => { %>
+                                    <option value="<%= restaurant.id %>" <%=(burger && burger.restaurantId == restaurant.id) && "selected" %>>
+                                        <%= restaurant.nombre %>
+                                    </option>
+                                <% }) %>
+                            </select>
+                            <% if (errors?.restaurantId) { %>
+                                <div class="error-label">
+                                    Por favor seleccione un restaurant
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <div class="mt-2">
+                            <input class="btn btn-primary" type="submit" value="<%= burger ? 'Actualizar' : 'Crear' %>">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../../components/footer.ejs') %>

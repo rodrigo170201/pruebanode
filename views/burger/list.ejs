@@ -1,0 +1,60 @@
+<%- include('../../components/header.ejs') %>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h3>Lista de Hamburguesas</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th></th> 
+                                    <!--<th>Id</th>-->
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Restaurant</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% burgers.forEach(burger => { %>
+                                    <tr>
+                                        <td>
+                                            <img src="/images/burgers/<%= burger.id %>.jpg" 
+                                                onerror="this.onerror=null;this.src='/images/burgers/nophoto.jpg';" 
+                                                alt="Foto de hamburguesa" class="burger-img" 
+                                                style="width: 100px; height: auto;" />
+                                        </td>
+                                        <!--<td><%= burger.id %></td>-->
+                                        <td><%= burger.nombre %></td>
+                                        <td><%= burger.descripcion %></td>
+                                        <td><%= burger.restaurant?.nombre %></td>
+                                        <td>
+                                            <a class="btn btn-success" href="/burgers/<%= burger.id %>/upload-photo">Cargar Foto</a>
+                                        </td>
+                                        <td><a class="btn btn-primary" href="/burgers/<%= burger.id %>/edit">Editar</a></td>
+                                        <td>
+                                            <form style="display:inline;" method="post" action="/burgers/<%= burger.id %>/delete" onsubmit="return confirm('¿Está seguro que desea eliminar esta hamburguesa?')">
+                                                <button class="btn btn-danger" type="submit">Eliminar</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-info" href="/burgers/<%= burger.id %>/reviews">Ver Reseñas</a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../../components/footer.ejs') %>

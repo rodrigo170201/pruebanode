@@ -1,0 +1,41 @@
+<%- include('../../components/header.ejs') %>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h3>Reseñas de <%= burger.nombre %></h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Autor</th>
+                                    <th>Puntuacion</th>
+                                    <th>Comentarios</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% reviews.forEach(review => { %>
+                                    <tr>
+                                        <td><%= review.user ? review.user.email : 'Desconocido' %></td>
+                                        <td>
+                                            <!-- Mostrar estrellas basadas en la puntuación -->
+                                            <% for (let i = 1; i <= 5; i++) { %>
+                                                <i class="fas fa-star <%= i <= review.puntuacion ? 'text-warning' : 'text-secondary' %>"></i>
+                                            <% } %>
+                                        </td>
+                                        <td><%= review.descripcion %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a class="btn btn-primary mt-3" href="/burgers">Volver a la lista de hamburguesas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../../components/footer.ejs') %>
